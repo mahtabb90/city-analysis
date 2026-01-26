@@ -221,6 +221,26 @@ Project Link: [https://github.com/mahtabb90/city-analysis](https://github.com/ma
 * []()
 * []()
 
+<!-- GROUP RULES -->
+## Rules to follow on start up.
+
+First time start up:
+1. Create a venv = python -m venv venv
+2. Activate venv. 
+   Mac/Linux = source venv/bin/activate
+   Windows = venv\Scripts\activate
+
+Every startup:
+1. Activate venv.
+2. Check Trello if there is anything to review.
+3. If there is nothing to review, choose a card and branch out if needed.
+
+When changes has been made and you are done:
+1. Git add . or Git add "map-name"
+2. Git commit -m "Message" (example "docs/yourmessage" if you have been working with a document).
+3. Git push
+
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
