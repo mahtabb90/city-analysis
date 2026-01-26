@@ -31,7 +31,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
-    ![City Vibe Logo](assets/city-vibe-logo.png)
+    <img src="logo/city-vibe-logo.png" alt="City Vibe Logo" width="300" />
   </a>
 
 <h3 align="center">project_title</h3>
