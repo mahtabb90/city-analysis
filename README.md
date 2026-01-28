@@ -229,6 +229,18 @@ When changes has been made and you are done:
 2. Git commit -m "Message" (example "docs/yourmessage" if you have been working with a document).
 3. Git push
 
+General DoD (Applies to ALL Tickets)
+
+Before any ticket is moved to Done, it must meet these "Global" criteria:
+
+PEP8 Compliance: Code is formatted correctly (use a linter like flake8 or a formatter like Black).
+
+Docstrings: Every function and class has a docstring explaining what it does.
+
+No Hardcoded Secrets: No API keys or personal paths are hardcoded (use environment variables or config files).
+
+Branch Merged: The code has been pushed to a branch, a Pull Request (PR) was created, and it was reviewed by at least one teammate.
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
