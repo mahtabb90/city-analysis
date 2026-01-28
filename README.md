@@ -229,6 +229,10 @@ When changes has been made and you are done:
 2. Git commit -m "Message" (example "docs/yourmessage" if you have been working with a document).
 3. Git push
 
+Pick a Ticket: Move it to "Doing" in Trello.
+Create a Branch: Name the branch after your ticket, e.g., git checkout -b feat/api-client.
+Write Code + Test: Write your module and at least one small pytest test in the tests/ folder.
+
 General DoD (Applies to ALL Tickets)
 
 Before any ticket is moved to Done, it must meet these "Global" criteria:
