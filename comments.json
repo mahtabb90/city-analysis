@@ -1,0 +1,74 @@
+{
+  "weather": [
+    {
+      "condition": "cold",
+      "temperature_max": 0,
+      "temperature_min": -50,
+      "comments": [
+        "Don't forget to wear a warm jacket, it's freezing!",
+        "Stay cozy! It's really cold outside."
+      ]
+    },
+    {
+      "condition": "cool",
+      "temperature_max": 10,
+      "temperature_min": 1,
+      "comments": [
+        "A light jacket should be enough today.",
+        "It's a bit chilly, maybe bring a sweater."
+      ]
+    },
+    {
+      "condition": "mild",
+      "temperature_max": 20,
+      "temperature_min": 11,
+      "comments": [
+        "Nice weather today! Enjoy your day outside.",
+        "Perfect day for a walk!"
+      ]
+    },
+    {
+      "condition": "hot",
+      "temperature_max": 45,
+      "temperature_min": 21,
+      "comments": [
+        "It's pretty hot today, stay hydrated!",
+        "A sunny day! Don't forget sunscreen."
+      ]
+    }
+  ],
+  "traffic": [
+    {
+      "mode": "bus",
+      "status": "heavy",
+      "comments": [
+        "Take the train today, buses are delayed due to heavy traffic.",
+        "Bus traffic is tough. Consider using the train."
+      ]
+    },
+    {
+      "mode": "train",
+      "status": "delayed",
+      "comments": [
+        "Trains are running late, maybe check alternative routes.",
+        "Plan extra time for your train commute today."
+      ]
+    },
+    {
+      "mode": "bus",
+      "status": "normal",
+      "comments": [
+        "Bus service is running smoothly today.",
+        "You can take the bus without worries."
+      ]
+    },
+    {
+      "mode": "train",
+      "status": "normal",
+      "comments": [
+        "Train service is running on time. Have a safe trip!",
+        "Everything is running smoothly on the trains."
+      ]
+    }
+  ]
+}
