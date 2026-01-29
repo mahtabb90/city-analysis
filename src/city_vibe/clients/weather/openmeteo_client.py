@@ -1,4 +1,3 @@
-# src/city_analysis/clients/weather/openmeteo_client.py
 import requests
 from datetime import datetime
 
@@ -6,7 +5,6 @@ def get_weather(lat, lon):
 
     url = "https://api.open-meteo.com/v1/forecast"
     
-    # These are the things we want to know right now
     params = {
         "latitude": lat,
         "longitude": lon,
@@ -14,15 +12,14 @@ def get_weather(lat, lon):
         "temperature_unit": "celsius",
         "wind_speed_unit": "kmh",
         "precipitation_unit": "mm",
-        "timezone": "auto"           # important → gives local time
+        "timezone": "auto"           # gives local time
     }
     
     try:
         response = requests.get(url, params=params, timeout=10)
         response.raise_for_status()          # raises error if not 200 OK
         data = response.json()
-        
-        # The important part is inside "current"
+
         now = data["current"]
         
         result = {
@@ -42,7 +39,7 @@ def get_weather(lat, lon):
         return None
 
 
-# Quick test when you run this file directly
+# A test when you run this file directly
 if __name__ == "__main__":
     # Stockholm coordinates
     weather = get_weather(59.3293, 18.0686)
