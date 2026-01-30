@@ -1,7 +1,7 @@
 from pathlib import Path
 
 # Base directory of the project
-BASE_DIR = Path(__file__).parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parents[2]
 
 # Database configuration
 DATABASE_NAME = "city_analysis.db"

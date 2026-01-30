@@ -4,31 +4,31 @@ from typing import Optional
 
 @dataclass
 class City:
-    id: Optional[int]
     name: str
     latitude: Optional[float] = None
     longitude: Optional[float] = None
+    id: Optional[int] = None
 
 @dataclass
 class WeatherRecord:
-    id: Optional[int]
     city_id: int
     timestamp: datetime
     temperature: float
     humidity: float
+    id: Optional[int] = None
 
 @dataclass
 class TrafficRecord:
-    id: Optional[int]
     city_id: int
     timestamp: datetime
     congestion_level: float
+    id: Optional[int] = None
 
 @dataclass
 class AnalysisResult:
-    id: Optional[int]
     city_id: int
     timestamp: datetime
     category: str
     status: str
     metrics_json: str
+    id: Optional[int] = None
