@@ -70,8 +70,6 @@ def plot_line_series(
     return out
 
 
-
-
 def plot_metric_summary_bar(
     metrics: MetricSummary,
     out_path: str | Path,
