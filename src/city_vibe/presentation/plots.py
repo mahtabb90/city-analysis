@@ -1,7 +1,7 @@
 """
 Plotting utilities for City Vibe Analyzer.
 
-This module focuses on saving plots to files .
+This module focuses on saving plots to files.
 """
 
 from __future__ import annotations
