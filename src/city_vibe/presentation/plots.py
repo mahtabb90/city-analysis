@@ -20,6 +20,11 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
 
+def _ensure_output_dir(out_path: Path) -> None:
+    """Ensure that the parent directory for the output path exists."""
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+
+
 def plot_line_series(
     values: Iterable[float],
     out_path: str | Path,
@@ -43,15 +48,19 @@ def plot_line_series(
     Returns:
         Path to the saved plot file.
     """
-    vals = list(values)  # Convert to list so we can measure length and index
+    vals = list(values)
     out = Path(out_path)
 
-    # Ensure output directory exists
-    out.parent.mkdir(parents=True, exist_ok=True)
+    _ensure_output_dir(out)
+
+    if x_labels is not None and len(x_labels) != len(vals):
+        raise ValueError(
+            "x_labels must have the same length as values "
+            f"(got {len(x_labels)} labels and {len(vals)} values)."
+        )
 
     fig, ax = plt.subplots(figsize=(8, 4))
 
-    # If x_labels are provided, use them. Otherwise use index positions.
     if x_labels is not None:
         ax.plot(x_labels, vals, marker="o")
         ax.tick_params(axis="x", rotation=45)
@@ -65,7 +74,7 @@ def plot_line_series(
 
     fig.tight_layout()
     fig.savefig(out, dpi=150)
-    plt.close(fig)  # Important: free memory in test/CI runs
+    plt.close(fig)
 
     return out
 
@@ -78,11 +87,9 @@ def plot_metric_summary_bar(
 ) -> Path:
     """
     Save a bar chart summarizing key metrics.
-
-    Shows avg, trend and variability as bars.
     """
     out = Path(out_path)
-    out.parent.mkdir(parents=True, exist_ok=True)
+    _ensure_output_dir(out)
 
     labels = ["Average", "Trend", "Variability"]
     values = [metrics.avg, metrics.trend, metrics.variability]
@@ -110,9 +117,8 @@ def plot_city_status_overview(
     Save a simple visual overview of city status.
     """
     out = Path(out_path)
-    out.parent.mkdir(parents=True, exist_ok=True)
+    _ensure_output_dir(out)
 
-    # Simple color mapping for statuses
     color_map = {
         CityStatus.STABLE: "#4CAF50",
         CityStatus.IMPROVING: "#2196F3",
