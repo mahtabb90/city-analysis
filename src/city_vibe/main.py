@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import logging
 import sys
 from city_vibe.database import init_db, db_exists
@@ -26,3 +27,11 @@ def main():
 
 if __name__ == "__main__":
     main()
+=======
+from __future__ import annotations
+
+from city_vibe.presentation.cli import main
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+>>>>>>> c6c5721 (Fix docstring formatting)
