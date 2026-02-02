@@ -21,10 +21,10 @@ def compute_trend(values: Iterable[float]) -> float:
     Trend = last_value - first_value.
     Returns 0.0 if fewer than 2 values are provided.
     """
-    vals = list(values)   # Convert input to list so we can access first/last values
+    vals = list(values)  # Convert input to list so we can access first/last values
     if len(vals) < 2:
         return 0.0
-    return float(vals[-1] - vals[0])     # Trend = last - first (simple change over time)
+    return float(vals[-1] - vals[0])  # Trend = last - first (simple change over time)
 
 
 def compute_variability(values: Iterable[float]) -> float:
