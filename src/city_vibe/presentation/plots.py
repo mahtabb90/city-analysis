@@ -20,9 +20,33 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
 
-def _ensure_output_dir(out_path: Path) -> None:
-    """Ensure that the parent directory for the output path exists."""
-    out_path.parent.mkdir(parents=True, exist_ok=True)
+def _save_plot(fig: matplotlib.figure.Figure, out_path: str | Path, *, dpi: int = 150) -> Path:
+    """
+    Save a matplotlib figure and always close it.
+
+    This helper:
+    - Ensures output directory exists
+    - Calls tight_layout for cleaner spacing
+    - Saves to disk
+    - Always closes the figure (try/finally) to avoid memory leaks in CI/tests
+
+    Args:
+        fig: Matplotlib figure to save.
+        out_path: Where to save the image file.
+        dpi: Image DPI.
+
+    Returns:
+        Path to the saved plot file.
+    """
+    out = Path(out_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+
+    try:
+        fig.tight_layout()
+        fig.savefig(out, dpi=dpi)
+        return out
+    finally:
+        plt.close(fig)
 
 
 def plot_line_series(
@@ -49,9 +73,9 @@ def plot_line_series(
         Path to the saved plot file.
     """
     vals = list(values)
-    out = Path(out_path)
 
-    _ensure_output_dir(out)
+    if not vals:
+        raise ValueError("values must not be empty")
 
     if x_labels is not None and len(x_labels) != len(vals):
         raise ValueError(
@@ -72,11 +96,7 @@ def plot_line_series(
     ax.set_ylabel(y_label)
     ax.grid(True, alpha=0.3)
 
-    fig.tight_layout()
-    fig.savefig(out, dpi=150)
-    plt.close(fig)
-
-    return out
+    return _save_plot(fig, out_path)
 
 
 def plot_metric_summary_bar(
@@ -87,10 +107,9 @@ def plot_metric_summary_bar(
 ) -> Path:
     """
     Save a bar chart summarizing key metrics.
-    """
-    out = Path(out_path)
-    _ensure_output_dir(out)
 
+    Shows avg, trend and variability as bars.
+    """
     labels = ["Average", "Trend", "Variability"]
     values = [metrics.avg, metrics.trend, metrics.variability]
 
@@ -100,11 +119,7 @@ def plot_metric_summary_bar(
     ax.set_ylabel("Value")
     ax.grid(True, axis="y", alpha=0.3)
 
-    fig.tight_layout()
-    fig.savefig(out, dpi=150)
-    plt.close(fig)
-
-    return out
+    return _save_plot(fig, out_path)
 
 
 def plot_city_status_overview(
@@ -116,9 +131,6 @@ def plot_city_status_overview(
     """
     Save a simple visual overview of city status.
     """
-    out = Path(out_path)
-    _ensure_output_dir(out)
-
     color_map = {
         CityStatus.STABLE: "#4CAF50",
         CityStatus.IMPROVING: "#2196F3",
@@ -141,8 +153,4 @@ def plot_city_status_overview(
     ax.set_title(title)
     ax.axis("off")
 
-    fig.tight_layout()
-    fig.savefig(out, dpi=150)
-    plt.close(fig)
-
-    return out
+    return _save_plot(fig, out_path)
