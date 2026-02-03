@@ -19,11 +19,8 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 [![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![project_license][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
 
 
@@ -39,14 +36,14 @@
   <p align="center">
     project_description
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/mahtabb90/city-analysis"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://github.com/mahtabb90/city-analysis">View Demo</a>
     &middot;
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/mahtabb90/city-analysis/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
-    <a href="https://github.com/github_username/repo_name/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/mahtabb90/city-analysis/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -72,7 +69,6 @@
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
@@ -188,8 +184,8 @@ Don't forget to give the project a star! Thanks again!
 
 ### Top contributors:
 
-<a href="https://github.com/github_username/repo_name/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=github_username/repo_name" alt="contrib.rocks image" />
+<a href="https://github.com/mahtabb90/city-analysis/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=mahtabb90/city-analysis" alt="Contributors" />
 </a>
 
 
@@ -220,6 +216,26 @@ Project Link: [https://github.com/mahtabb90/city-analysis](https://github.com/ma
 * []()
 * []()
 * []()
+
+<!-- GROUP RULES -->
+## Rules to follow on start up.
+
+First time start up:
+1. Create a venv = python -m venv venv
+2. Activate venv. 
+   Mac/Linux = source venv/bin/activate
+   Windows = venv\Scripts\activate
+
+Every startup:
+1. Activate venv.
+2. Check Trello if there is anything to review.
+3. If there is nothing to review, choose a card and branch out if needed.
+
+When changes has been made and you are done:
+1. Git add . or Git add "map-name"
+2. Git commit -m "Message" (example "docs/yourmessage" if you have been working with a document).
+3. Git push
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
