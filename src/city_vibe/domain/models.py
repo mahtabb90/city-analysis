@@ -1,34 +1,36 @@
-from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
+from pydantic import BaseModel, ConfigDict
 
-@dataclass
-class City:
+class City(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: Optional[int] = None
     name: str
     latitude: Optional[float] = None
     longitude: Optional[float] = None
-    id: Optional[int] = None
 
-@dataclass
-class WeatherRecord:
+class WeatherRecord(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: Optional[int] = None
     city_id: int
-    timestamp: datetime
+    timestamp: datetime = datetime.now()
     temperature: float
     humidity: float
-    id: Optional[int] = None
 
-@dataclass
-class TrafficRecord:
+class TrafficRecord(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: Optional[int] = None
     city_id: int
-    timestamp: datetime
+    timestamp: datetime = datetime.now()
     congestion_level: float
-    id: Optional[int] = None
+    speed: Optional[float] = None
+    incidents: Optional[int] = None
 
-@dataclass
-class AnalysisResult:
+class AnalysisResult(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: Optional[int] = None
     city_id: int
-    timestamp: datetime
+    timestamp: datetime = datetime.now()
     category: str
     status: str
     metrics_json: str
-    id: Optional[int] = None
