@@ -2,16 +2,18 @@ import requests
 from datetime import datetime
 from typing import Dict, Optional, List
 
+
 class OpenMeteoClient:
 
-    BASE_URL = "https://api.open-meteo.com/v1/forecast"
+    FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
+    ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive"
 
     def __init__(self):
         self.session = requests.Session()
 
-    def _fetch(self, params: Dict) -> Dict:
+    def _fetch(self, url: str, params: Dict) -> Dict:
         try:
-            response = self.session.get(self.BASE_URL, params=params, timeout=10)
+            response = self.session.get(url, params=params, timeout=10)
             response.raise_for_status()
             return response.json()
         except Exception as e:
@@ -70,7 +72,7 @@ class OpenMeteoClient:
             "timezone": "auto",
         }
 
-        data = self._fetch(params)
+        data = self._fetch(self.FORECAST_URL, params)
         if not data or "current" not in data:
             return None
 
@@ -87,7 +89,9 @@ class OpenMeteoClient:
             "description": self._wmo_to_description(current["weather_code"]),
         }
 
-    def get_forecast_daily(self, lat: float, lon: float, days: int = 7) -> Optional[Dict]:
+    def get_forecast_daily(
+        self, lat: float, lon: float, days: int = 7
+    ) -> Optional[Dict]:
         """
         7 days forecast
         Once again none if the request fails.
@@ -106,7 +110,7 @@ class OpenMeteoClient:
             "forecast_days": min(days, 16),
         }
 
-        data = self._fetch(params)
+        data = self._fetch(self.FORECAST_URL, params)
         if not data or "daily" not in data or "time" not in data["daily"]:
             return None
 
@@ -114,17 +118,23 @@ class OpenMeteoClient:
         forecast = []
 
         for i in range(len(daily["time"])):
-            forecast.append({
-                "date": datetime.fromisoformat(daily["time"][i]),
-                "description": self._wmo_to_description(daily["weather_code"][i]),
-                "temp_max": daily["temperature_2m_max"][i],
-                "temp_min": daily["temperature_2m_min"][i],
-                "feels_like_max": daily["apparent_temperature_max"][i],
-                "feels_like_min": daily["apparent_temperature_min"][i],
-                "precipitation_mm": daily["precipitation_sum"][i],
-                "precipitation_chance": daily["precipitation_probability_max"][i],
-                "wind_speed_max": daily["wind_speed_10m_max"][i],
-            })
+            forecast.append(
+                {
+                    "date": datetime.fromisoformat(daily["time"][i]),
+                    "description": self._wmo_to_description(
+                        daily["weather_code"][i]
+                    ),
+                    "temp_max": daily["temperature_2m_max"][i],
+                    "temp_min": daily["temperature_2m_min"][i],
+                    "feels_like_max": daily["apparent_temperature_max"][i],
+                    "feels_like_min": daily["apparent_temperature_min"][i],
+                    "precipitation_mm": daily["precipitation_sum"][i],
+                    "precipitation_chance": daily[
+                        "precipitation_probability_max"
+                    ][i],
+                    "wind_speed_max": daily["wind_speed_10m_max"][i],
+                }
+            )
 
         return {
             "days": forecast,
@@ -133,36 +143,48 @@ class OpenMeteoClient:
             "longitude": lon,
         }
 
+    def get_historical_weather_range(
+        self, lat: float, lon: float, start_date: datetime, end_date: datetime
+    ) -> Optional[List[Dict]]:
+        """
+        Fetches historical weather data for a specific range.
+        Returns a list of daily weather data dictionaries if successful, otherwise None.
+        """
+        params = {
+            "latitude": lat,
+            "longitude": lon,
+            "start_date": start_date.strftime("%Y-%m-%d"),
+            "end_date": end_date.strftime("%Y-%m-%d"),
+            "daily": (
+                "temperature_2m_mean,"
+                "relative_humidity_2m_mean,"
+                "precipitation_sum,"
+                "weather_code,"
+                "wind_speed_10m_mean"
+            ),
+            "timezone": "auto",
+        }
 
-if __name__ == "__main__":
-    client = OpenMeteoClient()
+        data = self._fetch(self.ARCHIVE_URL, params)
+        if not data or "daily" not in data or "time" not in data["daily"]:
+            return None
 
-    # Stockholm coordinates
-    lat, lon = 59.3293, 18.0686
+        daily = data["daily"]
+        historical_data = []
 
-    # Current weather
-    current = client.get_current_weather(lat, lon)
-    if current:
-        print("Current weather:")
-        print(f"  Time:           {current['time']}")
-        print(f"  Temp:           {current['temperature']} °C")
-        print(f"  Feels like:     {current['feels_like']} °C")
-        print(f"  Rain (last h):  {current['rain']} mm")
-        print(f"  Clouds:         {current['cloud_cover']}%")
-        print(f"  Wind:           {current['wind_speed']} km/h")
-        print(f"  Description:    {current['description']}")
-        print()
+        for i in range(len(daily["time"])):
+            historical_data.append(
+                {
+                    "date": datetime.fromisoformat(daily["time"][i]),
+                    "temperature": daily["temperature_2m_mean"][i],
+                    "humidity": daily["relative_humidity_2m_mean"][i],
+                    "precipitation": daily["precipitation_sum"][i],
+                    "weather_code": daily["weather_code"][i],
+                    "description": self._wmo_to_description(
+                        daily["weather_code"][i]
+                    ),
+                    "wind_speed": daily["wind_speed_10m_mean"][i],
+                }
+            )
 
-    # 7-day forecast
-    forecast = client.get_forecast_daily(lat, lon, days=7)
-    if forecast:
-        print("7-day forecast:")
-        for day in forecast["days"]:
-            date_str = day["date"].strftime("%a %Y-%m-%d")
-            precip = f"{day['precipitation_mm']:.1f} mm" if day['precipitation_mm'] > 0 else "no precip"
-            chance = f" ({day['precipitation_chance']}%)" if day['precipitation_chance'] > 10 else ""
-            print(f"  {date_str}: {day['description']}")
-            print(f"      {day['temp_min']:.1f} – {day['temp_max']:.1f} °C "
-                  f"(feels {day['feels_like_min']:.1f} – {day['feels_like_max']:.1f})")
-            print(f"      Precip: {precip}{chance} | Wind max: {day['wind_speed_max']:.1f} km/h")
-            print()
+        return historical_data

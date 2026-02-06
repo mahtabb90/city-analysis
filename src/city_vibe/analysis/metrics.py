@@ -14,36 +14,32 @@ class MetricSummary:
     variability: float
 
 
-def compute_trend(values: Iterable[float]) -> float:
+def compute_trend(values: Iterable[float | None]) -> float:
     """
     Compute a simple trend for a series.
 
-    Trend = last_value - first_value.
-    Returns 0.0 if fewer than 2 values are provided.
     """
-    vals = list(values)  # Convert input to list so we can access first/last values
+    vals = [v for v in values if v is not None]
     if len(vals) < 2:
         return 0.0
-    return float(vals[-1] - vals[0])  # Trend = last - first (simple change over time)
+    return float(vals[-1] - vals[0])
 
 
-def compute_variability(values: Iterable[float]) -> float:
+def compute_variability(values: Iterable[float | None]) -> float:
     """
     Compute variability using population standard deviation.
-
-    Returns 0.0 if fewer than 2 values are provided.
     """
-    vals = list(values)
+    vals = [v for v in values if v is not None]
     if len(vals) < 2:
         return 0.0
     return float(pstdev(vals))
 
 
-def summarize_series(values: Iterable[float]) -> MetricSummary:
+def summarize_series(values: Iterable[float | None]) -> MetricSummary:
     """
     Build a MetricSummary for a numeric series: avg, trend, variability.
     """
-    vals: List[float] = list(values)
+    vals = [v for v in values if v is not None]
     if not vals:
         return MetricSummary(avg=0.0, trend=0.0, variability=0.0)
 
