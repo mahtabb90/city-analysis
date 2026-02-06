@@ -13,6 +13,7 @@ from city_vibe.database import (
     get_connection,
 )
 from city_vibe.domain.models import City, WeatherRecord, TrafficRecord
+from city_vibe.clients.geocoding.geocoding_client import GeocodingClient
 
 
 @pytest.fixture
@@ -24,24 +25,34 @@ def test_db(tmp_path):
         yield db_path
 
 
+@pytest.fixture
+def mock_geocoding_success():
+    """Mocks the GeocodingClient to return successful coordinates."""
+    with patch(
+        "city_vibe.database._geocoding_client.get_coordinates",
+        return_value=(59.3293, 18.0686),
+    ) as mock_method:
+        yield mock_method
+
+
 # --- City Tests ---
 
 
-def test_get_or_create_city(test_db):
+def test_get_or_create_city(test_db, mock_geocoding_success):
     """Verifies city retrieval and creation logic."""
     city_id1 = get_or_create_city("Stockholm", 59.3, 18.0)
     assert city_id1 is not None
 
-    # Get existing
+    # Get existing (without coords, should use existing ones)
     city_id2 = get_or_create_city("Stockholm")
     assert city_id1 == city_id2
 
-    # Create another
+    # Create another (will use mock geocoding)
     city_id3 = get_or_create_city("Oslo")
     assert city_id1 != city_id3
 
 
-def test_update_metadata(test_db):
+def test_update_metadata(test_db, mock_geocoding_success):
     """Verifies the update functionality for city metadata."""
     city_id = insert_record("cities", City(name="Metropolis"))
     update_city_metadata(city_id, 40.7, -74.0)
@@ -56,9 +67,9 @@ def test_update_metadata(test_db):
 # --- Weather Tests ---
 
 
-def test_insert_and_fetch_weather_history(test_db):
+def test_insert_and_fetch_weather_history(test_db, mock_geocoding_success):
     """Verifies basic insert and fetch functionality for weather."""
-    city_id = get_or_create_city("Testville")
+    city_id = get_or_create_city("Testville")  # Will use mock geocoding
     weather = WeatherRecord(city_id=city_id, temperature=22.5, humidity=45.0)
     insert_record("weather_data", weather)
 
@@ -70,9 +81,9 @@ def test_insert_and_fetch_weather_history(test_db):
 # --- Traffic Tests ---
 
 
-def test_insert_many_traffic(test_db):
+def test_insert_many_traffic(test_db, mock_geocoding_success):
     """Verifies bulk insert and history retrieval for traffic data."""
-    city_id = get_or_create_city("Berlin")
+    city_id = get_or_create_city("Berlin")  # Will use mock geocoding
     base_time = datetime.now()
     records = [
         TrafficRecord(
@@ -109,9 +120,9 @@ def test_insert_many_traffic(test_db):
 # --- Deletion & Maintenance ---
 
 
-def test_delete_old_records(test_db):
+def test_delete_old_records(test_db, mock_geocoding_success):
     """Verifies that old records are correctly removed."""
-    city_id = get_or_create_city("Paris")
+    city_id = get_or_create_city("Paris")  # Will use mock geocoding
     old_time = datetime.now() - timedelta(days=10)
     record = TrafficRecord(city_id=city_id, timestamp=old_time, congestion_level=0.1)
     insert_many_records("traffic_data", [record])
@@ -126,7 +137,7 @@ def test_delete_old_records(test_db):
 # --- Security ---
 
 
-def test_sql_injection_protection(test_db):
+def test_sql_injection_protection(test_db, mock_geocoding_success):
     """Verifies protection against SQL injection in inserts."""
     dangerous_name = "'; DROP TABLE cities; --"
     insert_record("cities", City(name=dangerous_name))
