@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from city_vibe.analysis.metrics import MetricSummary
-from city_vibe.analysis.rules import CityStatus
+from city_vibe.analysis.vibe_algorithm import CityStatus
 from city_vibe.presentation.plots import (
     plot_city_status_overview,
     plot_line_series,
@@ -36,7 +36,9 @@ def test_plot_line_series_raises_on_empty_values(tmp_path: Path):
 def test_plot_line_series_raises_on_label_length_mismatch(tmp_path: Path):
     out_file = tmp_path / "mismatch.png"
 
-    with pytest.raises(ValueError, match="x_labels must have the same length as values"):
+    with pytest.raises(
+        ValueError, match="x_labels must have the same length as values"
+    ):
         plot_line_series(
             values=[1.0, 2.0],
             out_path=out_file,

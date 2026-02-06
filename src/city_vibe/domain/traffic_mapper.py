@@ -1,5 +1,6 @@
 from city_vibe.domain.traffic_models import TrafficData
 
+
 def map_traffic_data(raw_data):
     """
     Convert raw traffic JSON into a TrafficData object.
@@ -8,5 +9,5 @@ def map_traffic_data(raw_data):
         city=raw_data["city"],
         congestion=raw_data["congestion"],
         speed=raw_data["speed"],
-        incidents=raw_data["incidents"]
+        incidents=raw_data["incidents"],
     )
