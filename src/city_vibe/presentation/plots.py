@@ -12,15 +12,17 @@ from typing import Iterable, Sequence
 import matplotlib
 
 from city_vibe.analysis.metrics import MetricSummary
-from city_vibe.analysis.rules import CityStatus
+from city_vibe.analysis.vibe_algorithm import CityStatus
 
-# Use a non-interactive backend so plots can be created in CI (no GUI required).
+# Use non-interactive backend for CI (no GUI required).
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt  # noqa: E402
 
 
-def _save_plot(fig: matplotlib.figure.Figure, out_path: str | Path, *, dpi: int = 150) -> Path:
+def _save_plot(
+    fig: matplotlib.figure.Figure, out_path: str | Path, *, dpi: int = 150
+) -> Path:
     """
     Save a matplotlib figure and always close it.
 
