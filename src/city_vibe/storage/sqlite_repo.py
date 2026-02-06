@@ -86,7 +86,8 @@ class SQLiteRepo:
                     )
                     conn.commit()
 
-                return replace(existing, latitude=new_lat, longitude=new_lon)
+                return existing.model_copy(update={"latitude": new_lat, "longitude": new_lon})
+
 
             return existing
 
@@ -196,7 +197,8 @@ class SQLiteRepo:
             conn.commit()
             new_id = int(cur.lastrowid)
 
-        return replace(record, id=new_id)
+        return record.model_copy(update={"id": new_id})
+
 
     def get_recent_traffic(self, city_id: int, limit: int = 30) -> list[TrafficRecord]:
         with self._connect() as conn:
