@@ -246,13 +246,16 @@ def _pick_weather_comment(config: dict[str, Any], temperature: float) -> str:
 
 def _pick_traffic_comment(config: dict[str, Any], traffic_status: str) -> str:
     """
-    Din config använder 'status' som: heavy/delayed/normal.
-    Just nu har vi inte exakt samma status i analys_results (ni sparar CityStatus).
-    Så vi mappar CityStatus -> config-status:
-      - BAD -> heavy
-      - OK -> normal
-      - GOOD -> normal (du kan ändra senare)
-    """
+The configuration uses the status values: heavy / delayed / normal.
+At the moment, these do not exactly match the statuses stored in analysis_results
+(where CityStatus is used).
+
+Therefore, we map CityStatus to the configuration status as follows:
+  - BAD -> heavy
+  - OK -> normal
+  - GOOD -> normal
+"""
+
     status_map = {"BAD": "heavy", "OK": "normal", "GOOD": "normal"}
     mapped = status_map.get(traffic_status.upper(), "normal")
 
@@ -299,15 +302,18 @@ def _resolve_coordinates(city_name: str) -> Tuple[float, float]:
 # -----------------------------
 def analyze_city_run() -> None:
     """
-    1) Sense the city (analyze current vibe)
-    - user skriver stad
-    - programmet hämtar lat/lon automatiskt (DB -> geocoding -> fallback)
-    - hämtar data via clients
-    - kör metrics + rules
-    - sparar i SQLite (weather_data, traffic_data, analysis_results)
-    - genererar plots i reports/plots/
-    - skapar summary i reports/summary/ (json)
-    """
+1) Sense the city (analyze current vibe)
+
+- The user enters a city name
+- The program automatically resolves latitude/longitude
+  (database -> geocoding -> fallback)
+- Data is fetched via the client modules
+- Metrics and rule-based analysis are executed
+- Results are stored in SQLite (weather_data, traffic_data, analysis_results)
+- Plots are generated in reports/plots/
+- A summary file is created in reports/summary/ (JSON)
+"""
+
     init_db()
     _ensure_report_dirs()
 
