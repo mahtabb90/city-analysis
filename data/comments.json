@@ -70,5 +70,87 @@
         "Everything is running smoothly on the trains."
       ]
     }
+  ],
+  "vibes": [
+    {
+      "category": "CozyAtHome",
+      "comments": [
+        "The city exhales under the rain, perfect for an evening indoors.",
+        "Lights are flickering in windows, the mood is subdued and homey.",
+        "A perfect day for tea, blankets, and movies.",
+        "The city feels small and safe as rain patters against the glass.",
+        "The scent of wet asphalt mingles with the warmth from the cafes."
+      ]
+    },
+    {
+      "category": "PeopleOutOnTown",
+      "comments": [
+        "The sound of laughter fills the streets, the city is pulsing with energy.",
+        "Outdoor seating is buzzing with life and happy voices.",
+        "A collective joy sweeps through the neighborhoods.",
+        "The city feels like one big party under the open sky.",
+        "Promenades are filled with people enjoying the day."
+      ]
+    },
+    {
+      "category": "RushHourStress",
+      "comments": [
+        "Patience is tested in the asphalt jungle, everyone is in a hurry.",
+        "The city feels like a high-speed clockwork, the stress is palpable.",
+        "Forced strides and short glances dominate the cityscape.",
+        "A sense of collective impatience hangs over the traffic.",
+        "The hum from the city is intense and almost feverish."
+      ]
+    },
+    {
+      "category": "StormWatch",
+      "comments": [
+        "There's something electric in the air, nature is taking command.",
+        "The city prepares for the unknown, a tense anticipation prevails.",
+        "The wind whips between the buildings, reminding us of the wilderness.",
+        "A dramatic silence before the storm, the city holds its breath.",
+        "The sky light gives the streets an almost surreal glow."
+      ]
+    },
+    {
+      "category": "QuietCity",
+      "comments": [
+        "The silence is almost magical, the city rests with open eyes.",
+        "A lonely tram echoes between the houses, the peace is total.",
+        "The streets lie deserted, inviting reflection.",
+        "The city has lowered its guard, a rare sense of stillness.",
+        "The morning mist dampens all sounds, creating a dreamlike atmosphere."
+      ]
+    },
+    {
+      "category": "PaydayWeekend",
+      "comments": [
+        "Relief and celebration in every corner, the city treats itself to a little extra.",
+        "An aura of optimism and generosity spreads through the shops.",
+        "Wallets are full and spirits are high, the city comes alive.",
+        "The feeling of possibilities and a fresh start hangs in the air.",
+        "There's something special about the energy when the city just got paid."
+      ]
+    },
+    {
+      "category": "VibrantEvening",
+      "comments": [
+        "Neon lights are reflected in the asphalt, the night belongs to the curious.",
+        "The city changes shape into something elegant and mysterious.",
+        "A sophisticated energy begins where the day ended.",
+        "Music from inside the bars creates a rhythm for the whole block.",
+        "The evening air is cool and full of promises of adventure."
+      ]
+    },
+    {
+      "category": "Positive",
+      "comments": [
+        "A harmonious day where everything seems to flow as it should.",
+        "The sun and light traffic create a contagious calm.",
+        "The city shows its best and most welcoming side.",
+        "Small moments of everyday happiness are seen on every street corner.",
+        "A sense of balance and well-being characterizes the day."
+      ]
+    }
   ]
 }

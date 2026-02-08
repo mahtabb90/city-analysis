@@ -1,12 +1,14 @@
 import sqlite3
 import logging
 from datetime import datetime, timedelta
+
 from typing import List, Optional, Any, Iterable
 from pydantic import BaseModel
 from city_vibe.config import DATABASE_PATH
-from city_vibe.domain.models import WeatherRecord, TrafficRecord
+from city_vibe.domain.models import WeatherRecord, TrafficRecord, City
+from city_vibe.clients.geocoding.geocoding_client import GeocodingClient
 
-logger = logging.getLogger(__name__)
+_geocoding_client = GeocodingClient()  # Global instance for reuse
 
 
 def get_connection():
@@ -24,10 +26,11 @@ def _execute(
     many: bool = False,
 ) -> Any:
     """
-    Shared helper to execute SQL queries and handle connection/errors in one place.
+    Shared helper to execute SQL queries.
     fetch: 'all', 'one', or None
     many: boolean to use executemany
     """
+    logger = logging.getLogger(__name__)
     try:
         with get_connection() as conn:
             cursor = conn.cursor()
@@ -52,6 +55,7 @@ def _execute(
 
 def init_db():
     """Initializes the database schema if it doesn't exist."""
+    logger = logging.getLogger(__name__)  # Get logger inside function
     logger.info(f"Initializing database at {DATABASE_PATH}")
 
     with get_connection() as conn:
@@ -61,7 +65,9 @@ def init_db():
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL UNIQUE,
                 latitude REAL,
-                longitude REAL
+                longitude REAL,
+                is_confirmed BOOLEAN DEFAULT FALSE,
+                last_updated DATETIME DEFAULT CURRENT_TIMESTAMP
             );
             CREATE TABLE IF NOT EXISTS weather_data (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -69,6 +75,9 @@ def init_db():
                 timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                 temperature REAL,
                 humidity REAL,
+                wind_speed REAL,
+                precipitation REAL,
+                weather_code INTEGER,
                 FOREIGN KEY (city_id) REFERENCES cities (id)
             );
             CREATE TABLE IF NOT EXISTS traffic_data (
@@ -87,6 +96,21 @@ def init_db():
                 category TEXT,
                 status TEXT,
                 metrics_json TEXT,
+                FOREIGN KEY (city_id) REFERENCES cities (id)
+            );
+            CREATE TABLE IF NOT EXISTS forecast_data (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                city_id INTEGER,
+                date DATE NOT NULL,
+                description TEXT,
+                temp_max REAL,
+                temp_min REAL,
+                feels_like_max REAL,
+                feels_like_min REAL,
+                precipitation_mm REAL,
+                precipitation_chance REAL,
+                wind_speed_max REAL,
+                forecast_retrieval_time DATETIME NOT NULL,
                 FOREIGN KEY (city_id) REFERENCES cities (id)
             );
         """)
@@ -121,17 +145,67 @@ def insert_many_records(table_name: str, records: List[BaseModel]):
     cols = ", ".join(data_list[0].keys())
     placeholders = ", ".join(["?" for _ in data_list[0]])
     query = f"INSERT INTO {table_name} ({cols}) VALUES ({placeholders})"
-    _execute(query, [list(d.values()) for d in data_list], commit=True, many=True)
+    _execute(
+        query, [list(d.values()) for d in data_list], commit=True, many=True
+    )
 
 
 def get_or_create_city(
-    name: str, latitude: Optional[float] = None, longitude: Optional[float] = None
+    name: str,
+    latitude: Optional[float] = None,
+    longitude: Optional[float] = None,
 ) -> int:
-    """Retrieves a city ID or creates it."""
-
-    row = _execute("SELECT id FROM cities WHERE name = ?", (name,), fetch="one")
+    """
+    Retrieves a city ID or creates it.
+    Automatically fetches latitude and longitude if not provided.
+    """
+    logger = logging.getLogger(__name__)
+    row = _execute(
+        "SELECT id, latitude, longitude, is_confirmed "
+        "FROM cities WHERE name = ?",
+        (name,),
+        fetch="one",
+    )
     if row:
-        return row["id"]
+        city_id = row["id"]
+        # Update if coordinates are missing or different
+        if (row["latitude"] is None and row["longitude"] is None) or (
+            latitude is not None
+            and longitude is not None
+            and (row["latitude"] != latitude or row["longitude"] != longitude)
+        ):
+            if latitude is None or longitude is None:
+                coords = _geocoding_client.get_coordinates(name)
+                if coords:
+                    latitude, longitude = coords
+                else:
+                    logger.warning(
+                        f"No coordinates for city '{name}'. Skipping update."
+                    )
+                    return city_id
+
+            if latitude is not None and longitude is not None:
+                update_city_metadata(city_id, latitude, longitude)
+                logger.info(
+                    f"Updated coordinates for '{name}': ({latitude}, {longitude})"
+                )
+        return city_id
+
+    # If city does not exist, fetch coordinates if not provided
+    if latitude is None or longitude is None:
+        coords = _geocoding_client.get_coordinates(name)
+        if coords:
+            latitude, longitude = coords
+        else:
+            logger.error(
+                f"No coordinates for new city '{name}'. "
+                "Cannot create city without coordinates."
+            )
+            raise ValueError(f"Coordinates required for city '{name}'.")
+
+    logger.info(
+        f"Creating new city '{name}' with coordinates: ({latitude}, {longitude})"
+    )
     return _execute(
         "INSERT INTO cities (name, latitude, longitude) VALUES (?, ?, ?)",
         (name, latitude, longitude),
@@ -142,7 +216,9 @@ def get_or_create_city(
 def fetch_weather_history(city_name: str, days: int = 7) -> List[WeatherRecord]:
     """Fetches weather records for a city."""
 
-    since = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M:%S")
+    since = (datetime.now() - timedelta(days=days)).strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
     query = """
         SELECT w.* FROM weather_data w
         JOIN cities c ON w.city_id = c.id
@@ -156,7 +232,9 @@ def fetch_weather_history(city_name: str, days: int = 7) -> List[WeatherRecord]:
 def fetch_traffic_history(city_name: str, days: int = 7) -> List[TrafficRecord]:
     """Fetches traffic records for a city."""
 
-    since = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M:%S")
+    since = (datetime.now() - timedelta(days=days)).strftime(
+        "%Y-%m-%d %H:%M:%S"
+    )
     query = """
         SELECT t.* FROM traffic_data t
         JOIN cities c ON t.city_id = c.id
@@ -168,15 +246,89 @@ def fetch_traffic_history(city_name: str, days: int = 7) -> List[TrafficRecord]:
 
 
 def update_city_metadata(city_id: int, latitude: float, longitude: float):
-    """Updates city coordinates."""
+    """Updates city coordinates and last_updated timestamp."""
     _execute(
-        "UPDATE cities SET latitude = ?, longitude = ? WHERE id = ?",
+        "UPDATE cities SET latitude = ?, longitude = ?, "
+        "last_updated = CURRENT_TIMESTAMP WHERE id = ?",
         (latitude, longitude, city_id),
         commit=True,
     )
+
+
+def update_city_confirmation_status(
+    city_id: int, is_confirmed: bool, updated_at: Optional[datetime] = None
+):
+    """Updates confirmation status and last_updated timestamp."""
+    timestamp_param = (
+        updated_at.strftime("%Y-%m-%d %H:%M:%S")
+        if updated_at
+        else "CURRENT_TIMESTAMP"
+    )
+    query = "UPDATE cities SET is_confirmed = ?, last_updated = ? WHERE id = ?"
+    params = (is_confirmed, timestamp_param, city_id)
+
+    if updated_at is None:
+        query = (
+            "UPDATE cities SET is_confirmed = ?, "
+            "last_updated = CURRENT_TIMESTAMP WHERE id = ?"
+        )
+        params = (is_confirmed, city_id)
+
+    _execute(query, params, commit=True)
+
+
+def get_confirmed_cities() -> List[City]:
+    """Fetches all cities that are marked as confirmed."""
+    rows = _execute(
+        "SELECT id, name, latitude, longitude, is_confirmed, last_updated "
+        "FROM cities WHERE is_confirmed = TRUE",
+        fetch="all",
+    )
+    confirmed_cities = []
+    for row in rows:
+        city_data = dict(row)
+        if city_data["last_updated"]:
+            city_data["last_updated"] = datetime.fromisoformat(
+                city_data["last_updated"]
+            )
+        confirmed_cities.append(City.model_validate(city_data))
+    return confirmed_cities
+
+
+def get_city_by_id(city_id: int) -> Optional[City]:
+    """Fetches a city record by its ID."""
+    row = _execute(
+        "SELECT id, name, latitude, longitude, is_confirmed, last_updated FROM cities WHERE id = ?",
+        (city_id,),
+        fetch="one",
+    )
+    if row:
+        city_data = dict(row)
+        if city_data["last_updated"]:  # Convert if not None
+            city_data["last_updated"] = datetime.fromisoformat(
+                city_data["last_updated"]
+            )
+        return City.model_validate(city_data)
+    return None
+
+
+def delete_forecast_data_for_city(city_id: int):
+    """Deletes all forecast data for a specific city."""
+    _execute("DELETE FROM forecast_data WHERE city_id = ?", (city_id,), commit=True)
 
 
 def delete_old_records(table_name: str, days: int):
     """Prunes old data from the specified table."""
     cutoff = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M:%S")
     _execute(f"DELETE FROM {table_name} WHERE timestamp < ?", (cutoff,), commit=True)
+
+
+def clear_all_data():
+    """Deletes all records from all data tables."""
+    logger = logging.getLogger(__name__)
+    logger.info("Clearing all data from database tables...")
+    _execute("DELETE FROM analysis_results", commit=True)
+    _execute("DELETE FROM traffic_data", commit=True)
+    _execute("DELETE FROM weather_data", commit=True)
+    _execute("DELETE FROM cities", commit=True)
+    logger.info("All data cleared.")
