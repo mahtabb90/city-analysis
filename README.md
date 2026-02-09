@@ -72,10 +72,34 @@
 
 
 
-### Built With
+## Built With
 
-* [![Python][Python-url]](https://www.python.org/)
+### Languages
+[![Python][python-badge]](https://www.python.org/)
+[![Markdown][markdown-badge]](https://www.markdownguide.org/)
+[![JSON][json-badge]](https://www.json.org/)
+[![YAML][yaml-badge]](https://yaml.org/)
+[![INI][ini-badge]](https://en.wikipedia.org/wiki/INI_file)
 
+### Backend & Core
+[![Python][python-badge]](https://www.python.org/)
+[![SQLite][sqlite-badge]](https://www.sqlite.org/)
+
+### Data & Visualization
+[![NumPy][numpy-badge]](https://numpy.org/)
+[![Matplotlib][matplotlib-badge]](https://matplotlib.org/)
+[![Pillow][pillow-badge]](https://python-pillow.org/)
+
+### Testing & Code Quality
+[![Pytest][pytest-badge]](https://docs.pytest.org/)
+[![Black][black-badge]](https://black.readthedocs.io/)
+[![Flake8][flake8-badge]](https://flake8.pycqa.org/)
+[![Mypy][mypy-badge]](https://mypy-lang.org/)
+
+### DevOps & Tooling
+[![Git][git-badge]](https://git-scm.com/)
+[![GitHub][github-badge]](https://github.com/)
+[![GitHub Actions][gha-badge]](https://github.com/features/actions)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -237,6 +261,21 @@ When changes has been made and you are done:
 [issues-url]: https://github.com/mahtabb90/city-analysis/issues
 [license-shield]: https://img.shields.io/github/license/mahtabb90/city-analysis.svg?style=for-the-badge
 [license-url]: https://github.com/mahtabb90/city-analysis/blob/main/LICENSE.txt
-[Python-url]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
+[python-badge]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
+[markdown-badge]: https://img.shields.io/badge/Markdown-000000?style=for-the-badge&logo=markdown&logoColor=white
+[json-badge]: https://img.shields.io/badge/JSON-5E5C5C?style=for-the-badge&logo=json&logoColor=white
+[yaml-badge]: https://img.shields.io/badge/YAML-CB171E?style=for-the-badge&logo=yaml&logoColor=white
+[ini-badge]: https://img.shields.io/badge/INI-444444?style=for-the-badge
+[sqlite-badge]: https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white
+[numpy-badge]: https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white
+[matplotlib-badge]: https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge
+[pillow-badge]: https://img.shields.io/badge/Pillow-306998?style=for-the-badge
+[pytest-badge]: https://img.shields.io/badge/Pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white
+[black-badge]: https://img.shields.io/badge/Black-000000?style=for-the-badge
+[flake8-badge]: https://img.shields.io/badge/Flake8-2E7EEA?style=for-the-badge
+[mypy-badge]: https://img.shields.io/badge/Mypy-2A6DB2?style=for-the-badge
+[git-badge]: https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white
+[github-badge]: https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github
+[gha-badge]: https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white
 [product-screenshot]: <img src="logo/city-vibe-logo.png" alt="logo" />
 
