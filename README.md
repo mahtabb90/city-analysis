@@ -224,7 +224,7 @@ When changes has been made and you are done:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
+<img src="logo/city-vibe-banner.png" alt="banner" />
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
@@ -239,5 +239,5 @@ When changes has been made and you are done:
 [license-shield]: https://img.shields.io/github/license/mahtabb90/city-analysis.svg?style=for-the-badge
 [license-url]: https://github.com/mahtabb90/city-analysis/blob/main/LICENSE.txt
 [Python-url]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
-[product-screenshot]: <img src="logo/small-logo-cv.png" alt="Small vibe logo" width="150" />
+[product-screenshot]: <img src="logo/city-vibe-logo.png" alt="logo" />
 
