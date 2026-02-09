@@ -75,7 +75,7 @@
 
 ### Built With
 
-* [![Python][Python-url]] (Just an example for now)
+* [![Python][Python-url]](https://www.python.org/)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -238,5 +238,6 @@ When changes has been made and you are done:
 [issues-url]: https://github.com/mahtabb90/city-analysis/issues
 [license-shield]: https://img.shields.io/github/license/mahtabb90/city-analysis.svg?style=for-the-badge
 [license-url]: https://github.com/mahtabb90/city-analysis/blob/main/LICENSE.txt
+[Python-url]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
 [product-screenshot]: <img src="logo/small-logo-cv.png" alt="Small vibe logo" width="150" />
 
