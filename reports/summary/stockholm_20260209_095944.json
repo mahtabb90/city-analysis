@@ -1,0 +1,46 @@
+{
+  "city": "Stockholm",
+  "run_id": "20260209_095944",
+  "lat": 59.32938,
+  "lon": 18.06871,
+  "mission": "We bridge the gap between objective weather data and subjective city experience. We don’t just measure numbers — we measure atmosphere.",
+  "latest_weather": {
+    "time": "2026-02-09 09:45:00",
+    "temperature": -7.3,
+    "description": "Partly cloudy"
+  },
+  "latest_traffic": {
+    "congestion": 0.73,
+    "speed": 28.0,
+    "incidents": 2,
+    "date": "2026-02-09T09:59:45.293697",
+    "city": "Stockholm",
+    "timestamp": "2026-02-09T09:59:45.293812"
+  },
+  "analysis": {
+    "weather": {
+      "status": "unstable",
+      "metrics": {
+        "avg": -4.366666666666667,
+        "trend": -7.8,
+        "variability": 3.4829425618130556
+      }
+    },
+    "traffic": {
+      "status": "stable",
+      "metrics": {
+        "avg": 0.681,
+        "trend": 0.12,
+        "variability": 0.1653148511174964
+      }
+    }
+  },
+  "plots": {
+    "weather_line": "C:\\Users\\mahta\\my_projects\\city-analysis\\reports\\plots\\stockholm_weather_line_20260209_095944.png",
+    "traffic_line": "C:\\Users\\mahta\\my_projects\\city-analysis\\reports\\plots\\stockholm_traffic_line_20260209_095944.png",
+    "weather_metrics_bar": "C:\\Users\\mahta\\my_projects\\city-analysis\\reports\\plots\\stockholm_weather_metrics_20260209_095944.png",
+    "traffic_metrics_bar": "C:\\Users\\mahta\\my_projects\\city-analysis\\reports\\plots\\stockholm_traffic_metrics_20260209_095944.png",
+    "weather_status": "C:\\Users\\mahta\\my_projects\\city-analysis\\reports\\plots\\stockholm_weather_status_20260209_095944.png",
+    "traffic_status": "C:\\Users\\mahta\\my_projects\\city-analysis\\reports\\plots\\stockholm_traffic_status_20260209_095944.png"
+  }
+}
