@@ -66,7 +66,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
-    <img src="logo/logo-github-cv.png" alt="City Vibe Logo" width="300" height="200" />
+    <img src="logo/logo-github-cv.png" alt="City Vibe Logo" width="300" height="300" />
   </a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
