@@ -8,8 +8,10 @@ DATABASE_NAME = "city_analysis.db"
 DATABASE_PATH = BASE_DIR / "data" / DATABASE_NAME
 COMMENTS_PATH = BASE_DIR / "data" / "comments.json"
 
-# Ensure data directory exists
+# Ensure directories exist
 DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 # Logging configuration
 LOGGING_CONFIG = {
@@ -28,15 +30,22 @@ LOGGING_CONFIG = {
             "class": "logging.StreamHandler",
             "stream": "ext://sys.stdout",
         },
+        "file": {
+            "level": "INFO",
+            "formatter": "standard",
+            "class": "logging.FileHandler",
+            "filename": str(LOG_DIR / "city_vibe.log"),
+            "mode": "a",
+        },
     },
     "loggers": {
         "": {  # root logger
-            "handlers": ["console"],
+            "handlers": ["console", "file"],
             "level": "INFO",
             "propagate": True,
         },
         "city_vibe": {
-            "handlers": ["console"],
+            "handlers": ["console", "file"],
             "level": "INFO",
             "propagate": False,
         },

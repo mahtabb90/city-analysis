@@ -1,7 +1,8 @@
-from city_vibe import database
+import sys
 from city_vibe.database import db_exists, init_db
 from city_vibe.data_manager import DataManager
 from city_vibe.config import LOGGING_CONFIG, DEFAULT_CITIES
+from city_vibe.presentation.cli import menu
 
 
 def main() -> None:
@@ -13,46 +14,27 @@ def main() -> None:
 
     logger = logging.getLogger(__name__)
 
-    logger.info("Starting City Vibe Analysis...")
+    if "--cli" in sys.argv:
+        # The menu() function handles its own warm-up with CLI styling
+        menu()
+        return
 
-    if not db_exists():
-        logger.info("Database not found. Initializing...")
-        init_db()
-    else:
-        logger.info("Database already exists.")
+    logger.info("Starting City Vibe Analysis (Automated Mode)...")
 
     data_manager = DataManager()
 
-    # Process default cities on startup if they are not confirmed
+    # Initialize the database if it doesn't exist
+    if not db_exists():
+        logger.info("Database not found. Initializing database...")
+        init_db()
+        logger.info("Database initialized.")
+
+    # Geocode DEFAULT_CITIES and fetch initial historical data
+    logger.info(f"Processing default cities: {DEFAULT_CITIES}")
     for city_name in DEFAULT_CITIES:
-        try:
-            city_id = database.get_or_create_city(city_name)
-            city_record = database.get_city_by_id(city_id)
+        data_manager.refresh_city_data(city_name)
 
-            if city_record and city_record.is_confirmed:
-                logger.info(
-                    f"Default city '{city_name}' confirmed. "
-                    "Skipping historical data refresh."
-                )
-            else:
-                logger.info(
-                    f"Processing default city: '{city_name}' "
-                    "for historical data."
-                )
-                data_manager.refresh_city_data(city_name)
-        except ValueError as e:
-            logger.error(
-                f"Geocoding error for city '{city_name}': {e}."
-            )
-        except Exception as e:
-            logger.error(
-                f"Unexpected error for city '{city_name}': {e}."
-            )
-
+    # Refresh current data and run vibe analysis for all confirmed cities
     data_manager.refresh_all_confirmed_cities_current_data()
 
-    logger.info("System ready.")
-
-
-if __name__ == "__main__":
-    main()
+    logger.info("City Vibe Analysis (Automated Mode) completed.")

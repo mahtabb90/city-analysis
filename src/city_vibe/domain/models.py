@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
 
@@ -49,7 +49,7 @@ class ForecastRecord(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: Optional[int] = None
     city_id: int
-    date: datetime
+    date: date 
     description: str
     temp_max: float
     temp_min: float

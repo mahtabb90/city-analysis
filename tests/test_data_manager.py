@@ -59,9 +59,7 @@ def mock_traffic_client_instance():
         # Default mock responses
         mock_instance.get_historical_traffic_range.return_value = [
             {
-                "timestamp": (
-                    datetime.now() - timedelta(days=i, hours=j)
-                ).isoformat(),
+                "timestamp": (datetime.now() - timedelta(days=i, hours=j)).isoformat(),
                 "congestion": 0.5,
                 "speed": 30.0,
                 "incidents": 1,
@@ -118,9 +116,7 @@ def test_data_manager_init():
     """Test that DataManager initializes its clients."""
     with patch("city_vibe.data_manager.OpenMeteoClient") as MockOpenMeteo, patch(
         "city_vibe.data_manager.TrafficClient"
-    ) as MockTraffic, patch(
-        "city_vibe.data_manager.GeocodingClient"
-    ) as MockGeocoding:
+    ) as MockTraffic, patch("city_vibe.data_manager.GeocodingClient") as MockGeocoding:
 
         dm = DataManager()
         MockOpenMeteo.assert_called_once()
@@ -164,31 +160,21 @@ def test_refresh_city_data_success(
 
     mock_open_meteo_client_instance.get_historical_weather_range.assert_called_once()
     assert (
-        mock_open_meteo_client_instance.get_historical_weather_range.call_args[
-            0
-        ][0]
+        mock_open_meteo_client_instance.get_historical_weather_range.call_args[0][0]
         == 40.0
     )  # Latitude
 
     mock_traffic_client_instance.get_historical_traffic_range.assert_called_once()
     assert (
-        mock_traffic_client_instance.get_historical_traffic_range.call_args[0][
-            0
-        ]
+        mock_traffic_client_instance.get_historical_traffic_range.call_args[0][0]
         == city_name
     )
 
     assert (
         mock_database.insert_many_records.call_count == 2
     )  # Once for weather, once for traffic
-    assert (
-        mock_database.insert_many_records.call_args_list[0][0][0]
-        == "weather_data"
-    )
-    assert (
-        mock_database.insert_many_records.call_args_list[1][0][0]
-        == "traffic_data"
-    )
+    assert mock_database.insert_many_records.call_args_list[0][0][0] == "weather_data"
+    assert mock_database.insert_many_records.call_args_list[1][0][0] == "traffic_data"
 
     mock_database.update_city_confirmation_status.assert_called_once_with(
         city_id, True, updated_at=mock_updated_at
@@ -214,9 +200,7 @@ def test_refresh_city_data_geocoding_failure(
     mock_database.update_city_confirmation_status.assert_not_called()
 
 
-def test_get_city_forecast_success(
-    mock_open_meteo_client_instance, mock_database
-):
+def test_get_city_forecast_success(mock_open_meteo_client_instance, mock_database):
     """Test successful retrieval and storage of 7-day forecast."""
     dm = DataManager()
     city_name = "ForecastCity"
@@ -230,6 +214,25 @@ def test_get_city_forecast_success(
         is_confirmed=True,
         last_updated=datetime.now(),
     )
+    # Mock datetime.now().date()
+    mock_today_date = datetime.now().date()
+    # Mock data for get_forecast_daily to return date strings
+    mock_open_meteo_client_instance.get_forecast_daily.return_value = {
+        "days": [
+            {
+                "date": (mock_today_date + timedelta(days=i)).isoformat(),
+                "description": f"desc_{i}",
+                "temp_max": 20.0 + i,
+                "temp_min": 10.0 + i,
+                "feels_like_max": 18.0 + i,
+                "feels_like_min": 8.0 + i,
+                "precipitation_mm": 0.0,
+                "precipitation_chance": 0.0,
+                "wind_speed_max": 10.0,
+            }
+            for i in range(7)
+        ]
+    }
 
     forecast_results = dm.get_city_forecast(city_name)
     assert forecast_results is not None
@@ -241,8 +244,9 @@ def test_get_city_forecast_success(
     )
     mock_database.insert_many_records.assert_called_once()
     assert mock_database.insert_many_records.call_args[0][0] == "forecast_data"
-    # Ensure delete_forecast_data_for_city is NOT called
-    mock_database.delete_forecast_data_for_city.assert_not_called()
+    mock_database.delete_forecast_data_for_city.assert_called_once_with(
+        city_id
+    )  # Should be called once
 
 
 def test_refresh_all_confirmed_cities_current_data_no_cities(mock_database):
