@@ -1,23 +1,3 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
-<a id="readme-top"></a>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
 [![Contributors][contributors-shield]][contributors-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
@@ -31,10 +11,15 @@
     <img src="logo/city-vibe-logo.png" alt="City Vibe Logo" width="300" />
   </a>
 
-<h3 align="center">project_title</h3>
+<h3 align="center">City Vibe Analysis</h3>
 
   <p align="center">
-    project_description
+    <b>Unlock the emotional pulse of your city with City Vibe Analysis! </b>
+    <br>
+    Our innovative platform goes beyond raw weather data, revealing the true "vibe" of urban environments. Predict moments of 'fredagskänsla' (Friday feeling) or 'hemtrevnad' (coziness) to empower businesses and city planners with unprecedented human-centric insights. Leverage historical trends and future forecasts to optimize urban experiences, enhance well-being, and drive engagement in your community. Discover the unseen emotional landscapes shaped by weather and traffic – transform your city into a truly responsive and harmonious space!
+  </p>
+  <p align="center">
+    Helps cities and businesses understand the human side of weather by measuring urban atmosphere and predicting specific experiences (e.g., 'Friday feeling', 'coziness') using an automated pipeline for historical data collection and future forecasts. The project also saves multiple versions of weather forecasts over time to enable forecast precision analysis. Upon startup, predefined cities (`DEFAULT_CITIES`) are automatically geocoded, 60 days of historical weather and traffic data are retrieved and stored, and the city is marked as confirmed. Subsequently, current data for all confirmed cities is updated.
     <br />
     <a href="https://github.com/mahtabb90/city-analysis"><strong>Explore the docs »</strong></a>
     <br />
@@ -78,25 +63,44 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-Here's a blank template to get started. To avoid retyping too much info, do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`, `project_license`
+<br />
+<div align="center">
+  <a href="https://github.com/github_username/repo_name">
+    <img src="logo/logo-github-cv-fix.png" alt="City Vibe Logo" width="300" />
+  </a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 
-### Built With
+## Built With
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+### Languages
+[![Python][python-badge]](https://www.python.org/)
+[![Markdown][markdown-badge]](https://www.markdownguide.org/)
+[![JSON][json-badge]](https://www.json.org/)
+[![YAML][yaml-badge]](https://yaml.org/)
+[![INI][ini-badge]](https://en.wikipedia.org/wiki/INI_file)
+
+### Backend & Core
+[![Python][python-badge]](https://www.python.org/)
+[![SQLite][sqlite-badge]](https://www.sqlite.org/)
+
+### Data & Visualization
+[![NumPy][numpy-badge]](https://numpy.org/)
+[![Matplotlib][matplotlib-badge]](https://matplotlib.org/)
+[![Pillow][pillow-badge]](https://python-pillow.org/)
+
+### Testing & Code Quality
+[![Pytest][pytest-badge]](https://docs.pytest.org/)
+[![Black][black-badge]](https://black.readthedocs.io/)
+[![Flake8][flake8-badge]](https://flake8.pycqa.org/)
+[![Mypy][mypy-badge]](https://mypy-lang.org/)
+
+### DevOps & Tooling
+[![Git][git-badge]](https://git-scm.com/)
+[![GitHub][github-badge]](https://github.com/)
+[![GitHub Actions][gha-badge]](https://github.com/features/actions)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -105,36 +109,29 @@ Here's a blank template to get started. To avoid retyping too much info, do a se
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+This project requires Python 3.8+ and pip.
+* Python 3.8+
+* pip
   ```sh
-  npm install npm@latest -g
+  python3 -m ensurepip --default-pip
   ```
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. Clone the repo
    ```sh
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/mahtabb90/city-analysis.git
    ```
-3. Install NPM packages
+2. Create and activate a Python virtual environment
    ```sh
-   npm install
+   python3 -m venv venv
+   source venv/bin/activate
    ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-5. Change git remote url to avoid accidental pushes to base project
+3. Install Python packages from requirements.txt
    ```sh
-   git remote set-url origin github_username/repo_name
-   git remote -v # confirm the changes
+   pip install -r requirements.txt
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -144,26 +141,49 @@ This is an example of how to list things you need to use the software and how to
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+To use this project, activate your virtual environment and run the main script. Upon execution:
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+1.  **City Initialization**: The program will automatically geocode predefined cities (`DEFAULT_CITIES`) if they haven't been processed before.
+2.  **Historical Data Collection**: For newly processed cities, 60 days of historical weather and traffic data will be fetched and stored.
+3.  **Real-time Updates**: Current weather and traffic data will be fetched and updated for all confirmed cities.
+4.  **Data Storage**: All collected data, including multiple versions of weather forecasts, will be saved to facilitate analysis of forecast precision.
+5.  **Output**: The program will log its activities to `logs/city_vibe.log`, indicating data collection progress and status. Data will be stored in the `data/city_analysis.db` SQLite database, and generated reports/plots will be saved in the `reports/` directory.
+
+To run the project:
+```sh
+source venv/bin/activate
+Python3 run.py --cli
+Eller
+./.venv/Scripts/python.exe run.py --cli
+PYTHONPATH=src ./.venv/Scripts/python.exe run.py --cli
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
+Our vision for City Vibe Analysis unfolds in distinct phases, each building upon the last to deliver comprehensive urban insights:
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+-   **Phase 1: Core Data Infrastructure & Geocoding**
+    -   Integrate robust Weather API (Open-Meteo) for comprehensive meteorological data.
+    -   Implement Traffic Data acquisition (initially via MockdataAPI, with future real-time integrations).
+    -   Develop a resilient Data Manager for seamless collection, storage, and retrieval of historical and current data.
+    -   Automate geocoding for all `DEFAULT_CITIES` and establish initial 60-day historical data collection.
+
+-   **Phase 2: Predictive Analytics & Vibe Modeling**
+    -   Engineer the "Vibe Analyzer" module to correlate weather, traffic, and other urban metrics with human sentiments.
+    -   Develop sophisticated algorithms to predict specific "city vibes" (e.g., 'fredagskänsla', 'hemtrevnad').
+    -   Implement multi-version weather forecast saving for advanced forecast precision analysis.
+
+-   **Phase 3: Visualization, Reporting & User Experience**
+    -   Create dynamic visualizations to intuitively display city vibes, weather patterns, and traffic flows.
+    -   Develop comprehensive reporting tools for businesses and city planners.
+    -   Design and implement an intuitive user interface (CLI or web-based) for effortless interaction and insight generation.
+
+See the [open issues](https://github.com/mahtabb90/city-analysis/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTRIBUTING -->
@@ -193,7 +213,7 @@ Don't forget to give the project a star! Thanks again!
 <!-- LICENSE -->
 ## License
 
-Distributed under the project_license. See `LICENSE.txt` for more information.
+Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -202,7 +222,7 @@ Distributed under the project_license. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
+Your Name - Rasmus-skola@outlook.com
 
 Project Link: [https://github.com/mahtabb90/city-analysis](https://github.com/mahtabb90/city-analysis)
 
@@ -210,12 +230,14 @@ Project Link: [https://github.com/mahtabb90/city-analysis](https://github.com/ma
 
 
 
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+<!-- GROUP RULES -->
+## Rules to follow on start up.
 
-* []()
-* []()
-* []()
+First time start up:
+1. Create a venv = python -m venv venv
+2. Activate venv. 
+   Mac/Linux = source venv/bin/activate
+   Windows = venv\Scripts\activate
 
 <!-- GROUP RULES -->
 ## Rules to follow on start up.
@@ -239,38 +261,42 @@ When changes has been made and you are done:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+When changes has been made and you are done:
+1. Git add . or Git add "map-name"
+2. Git commit -m "Message" (example "docs/yourmessage" if you have been working with a document).
+3. Git push
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<img src="logo/city-vibe-banner.png" alt="banner" />
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo_name.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo_name/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo_name.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo_name/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo_name.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo_name/stargazers
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo_name.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo_name/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
-[product-screenshot]: images/screenshot.png
-<!-- Shields.io badges. You can a comprehensive list with many more badges at: https://github.com/inttter/md-badges -->
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com # city-analysis
-Python project for analyzing city data over time using public APIs, data analysis, and visualization.
+[contributors-shield]: https://img.shields.io/github/contributors/mahtabb90/city-analysis.svg?style=for-the-badge
+[contributors-url]: https://github.com/mahtabb90/city-analysis/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/mahtabb90/city-analysis.svg?style=for-the-badge
+[forks-url]: https://github.com/mahtabb90/city-analysis/network/members
+[stars-shield]: https://img.shields.io/github/stars/mahtabb90/city-analysis.svg?style=for-the-badge
+[stars-url]: https://github.com/mahtabb90/city-analysis/stargazers
+[issues-shield]: https://img.shields.io/github/issues/mahtabb90/city-analysis.svg?style=for-the-badge
+[issues-url]: https://github.com/mahtabb90/city-analysis/issues
+[license-shield]: https://img.shields.io/github/license/mahtabb90/city-analysis.svg?style=for-the-badge
+[license-url]: https://github.com/mahtabb90/city-analysis/blob/main/LICENSE.txt
+[python-badge]: https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white
+[markdown-badge]: https://img.shields.io/badge/Markdown-000000?style=for-the-badge&logo=markdown&logoColor=white
+[json-badge]: https://img.shields.io/badge/JSON-5E5C5C?style=for-the-badge&logo=json&logoColor=white
+[yaml-badge]: https://img.shields.io/badge/YAML-CB171E?style=for-the-badge&logo=yaml&logoColor=white
+[ini-badge]: https://img.shields.io/badge/INI-444444?style=for-the-badge
+[sqlite-badge]: https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white
+[numpy-badge]: https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white
+[matplotlib-badge]: https://img.shields.io/badge/Matplotlib-11557C?style=for-the-badge
+[pillow-badge]: https://img.shields.io/badge/Pillow-306998?style=for-the-badge
+[pytest-badge]: https://img.shields.io/badge/Pytest-0A9EDC?style=for-the-badge&logo=pytest&logoColor=white
+[black-badge]: https://img.shields.io/badge/Black-000000?style=for-the-badge
+[flake8-badge]: https://img.shields.io/badge/Flake8-2E7EEA?style=for-the-badge
+[mypy-badge]: https://img.shields.io/badge/Mypy-2A6DB2?style=for-the-badge
+[git-badge]: https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white
+[github-badge]: https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github
+[gha-badge]: https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white
+[product-screenshot]: <img src="logo/city-vibe-logo.png" alt="logo" />
+
