@@ -4,11 +4,16 @@ from datetime import datetime, timedelta
 
 from typing import List, Optional, Any, Iterable
 from pydantic import BaseModel
+
 from city_vibe.config import DATABASE_PATH
-from city_vibe.domain.models import WeatherRecord, TrafficRecord, City
+from city_vibe.domain.models import WeatherRecord
+from city_vibe.domain.models import TrafficRecord
+from city_vibe.domain.models import City  # noqa: F401
+from city_vibe.domain.models import ForecastRecord
+from city_vibe.domain.models import AnalysisResult  # noqa: F401
 from city_vibe.clients.geocoding.geocoding_client import GeocodingClient
 
-_geocoding_client = GeocodingClient()  # Global instance for reuse
+_geocoding_client = GeocodingClient()
 
 
 def get_connection():
@@ -55,7 +60,7 @@ def _execute(
 
 def init_db():
     """Initializes the database schema if it doesn't exist."""
-    logger = logging.getLogger(__name__)  # Get logger inside function
+    logger = logging.getLogger(__name__)
     logger.info(f"Initializing database at {DATABASE_PATH}")
 
     with get_connection() as conn:
@@ -145,9 +150,7 @@ def insert_many_records(table_name: str, records: List[BaseModel]):
     cols = ", ".join(data_list[0].keys())
     placeholders = ", ".join(["?" for _ in data_list[0]])
     query = f"INSERT INTO {table_name} ({cols}) VALUES ({placeholders})"
-    _execute(
-        query, [list(d.values()) for d in data_list], commit=True, many=True
-    )
+    _execute(query, [list(d.values()) for d in data_list], commit=True, many=True)
 
 
 def get_or_create_city(
@@ -161,8 +164,7 @@ def get_or_create_city(
     """
     logger = logging.getLogger(__name__)
     row = _execute(
-        "SELECT id, latitude, longitude, is_confirmed "
-        "FROM cities WHERE name = ?",
+        "SELECT id, latitude, longitude, is_confirmed " "FROM cities WHERE name = ?",
         (name,),
         fetch="one",
     )
@@ -216,9 +218,7 @@ def get_or_create_city(
 def fetch_weather_history(city_name: str, days: int = 7) -> List[WeatherRecord]:
     """Fetches weather records for a city."""
 
-    since = (datetime.now() - timedelta(days=days)).strftime(
-        "%Y-%m-%d %H:%M:%S"
-    )
+    since = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M:%S")
     query = """
         SELECT w.* FROM weather_data w
         JOIN cities c ON w.city_id = c.id
@@ -232,9 +232,7 @@ def fetch_weather_history(city_name: str, days: int = 7) -> List[WeatherRecord]:
 def fetch_traffic_history(city_name: str, days: int = 7) -> List[TrafficRecord]:
     """Fetches traffic records for a city."""
 
-    since = (datetime.now() - timedelta(days=days)).strftime(
-        "%Y-%m-%d %H:%M:%S"
-    )
+    since = (datetime.now() - timedelta(days=days)).strftime("%Y-%m-%d %H:%M:%S")
     query = """
         SELECT t.* FROM traffic_data t
         JOIN cities c ON t.city_id = c.id
@@ -260,9 +258,7 @@ def update_city_confirmation_status(
 ):
     """Updates confirmation status and last_updated timestamp."""
     timestamp_param = (
-        updated_at.strftime("%Y-%m-%d %H:%M:%S")
-        if updated_at
-        else "CURRENT_TIMESTAMP"
+        updated_at.strftime("%Y-%m-%d %H:%M:%S") if updated_at else "CURRENT_TIMESTAMP"
     )
     query = "UPDATE cities SET is_confirmed = ?, last_updated = ? WHERE id = ?"
     params = (is_confirmed, timestamp_param, city_id)
@@ -309,6 +305,87 @@ def get_city_by_id(city_id: int) -> Optional[City]:
                 city_data["last_updated"]
             )
         return City.model_validate(city_data)
+    return None
+
+
+def fetch_latest_current_vibe_analysis(city_id: int) -> Optional[AnalysisResult]:
+    """
+    Fetches the latest non-forecast overall vibe analysis for a specific city.
+    Excludes categories prefixed with 'Forecast_'.
+    """
+    query = """
+        SELECT * FROM analysis_results
+        WHERE city_id = ? AND category NOT LIKE 'Forecast_%%'
+        ORDER BY timestamp DESC
+        LIMIT 1
+    """
+    row = _execute(query, (city_id,), fetch="one")
+    if row:
+        return AnalysisResult.model_validate(dict(row))
+    return None
+
+
+def fetch_all_forecast_weather_for_city(city_id: int) -> List[ForecastRecord]:
+    """
+    Fetches all unique forecast weather records for a specific city, ordered by date.
+    Only retrieves the latest forecast for each date.
+    """
+    query = """
+        SELECT T1.*
+        FROM forecast_data AS T1
+        INNER JOIN (
+            SELECT date, MAX(forecast_retrieval_time) AS MaxRetrievalTime
+            FROM forecast_data
+            WHERE city_id = ?
+            GROUP BY date
+        ) AS T2
+        ON T1.date = T2.date AND T1.forecast_retrieval_time = T2.MaxRetrievalTime
+        WHERE T1.city_id = ?
+        ORDER BY T1.date ASC
+    """
+    rows = _execute(query, (city_id, city_id), fetch="all")
+    return [ForecastRecord.model_validate(dict(row)) for row in rows]
+
+
+def fetch_all_forecast_vibe_for_city(city_id: int) -> List[AnalysisResult]:
+    """
+    Fetches all forecast vibe analyses for a specific city, ordered by timestamp (date).
+    Only retrieves the latest forecast vibe for each date.
+    """
+    query = """
+        SELECT T1.*
+        FROM analysis_results AS T1
+        INNER JOIN (
+            SELECT
+                strftime('%Y-%m-%d', timestamp) AS forecast_date,
+                MAX(timestamp) AS MaxTimestamp
+            FROM analysis_results
+            WHERE city_id = ? AND category LIKE 'Forecast_%%'
+            GROUP BY forecast_date
+        ) AS T2
+        ON strftime('%Y-%m-%d', T1.timestamp) = T2.forecast_date AND T1.timestamp = T2.MaxTimestamp
+        WHERE T1.city_id = ? AND T1.category LIKE 'Forecast_%%'
+        ORDER BY T1.timestamp ASC
+    """
+    rows = _execute(query, (city_id, city_id), fetch="all")
+    return [AnalysisResult.model_validate(dict(row)) for row in rows]
+
+
+def fetch_forecast_data(
+    city_id: int, target_date: datetime.date
+) -> Optional[ForecastRecord]:
+    """Fetches the latest forecast record for a specific city and date."""
+    query = """
+        SELECT * FROM forecast_data
+        WHERE city_id = ? AND date = ?
+        ORDER BY forecast_retrieval_time DESC
+        LIMIT 1
+    """
+    # Convert date object to string for comparison with DATE column
+    date_str = target_date.strftime("%Y-%m-%d")
+    row = _execute(query, (city_id, date_str), fetch="one")
+    if row:
+        return ForecastRecord.model_validate(dict(row))
     return None
 
 

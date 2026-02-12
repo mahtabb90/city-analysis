@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from typing import List, Optional
 
 from city_vibe.clients.weather.openmeteo_client import OpenMeteoClient
@@ -11,7 +11,10 @@ from city_vibe.domain.models import (
     ForecastRecord,
 )
 from city_vibe import database
-from city_vibe.analysis.vibe_algorithm import calculate_vibe
+from city_vibe.analysis.vibe_algorithm import (
+    calculate_vibe,
+    predict_vibe_for_date,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -31,11 +34,7 @@ class DataManager:
             # 1. Get or create city and its coordinates
             city_id = database.get_or_create_city(city_name)
             city_record = database.get_city_by_id(city_id)
-            if (
-                not city_record
-                or not city_record.latitude
-                or not city_record.longitude
-            ):
+            if not city_record or not city_record.latitude or not city_record.longitude:
                 logger.error(
                     f"Could not get coordinates for city '{city_name}'. "
                     "Aborting data refresh."
@@ -43,19 +42,15 @@ class DataManager:
                 return None
 
             lat, lon = city_record.latitude, city_record.longitude
-            logger.info(
-                f"Refreshing data for city '{city_name}' ({lat}, {lon})."
-            )
+            logger.info(f"Refreshing data for city '{city_name}' ({lat}, {lon}).")
 
             # Define date range for historical data (60 days)
             end_date = datetime.now()
             start_date = end_date - timedelta(days=60)
 
             # Fetch historical weather data
-            weather_history_raw = (
-                self.weather_client.get_historical_weather_range(
-                    lat, lon, start_date, end_date
-                )
+            weather_history_raw = self.weather_client.get_historical_weather_range(
+                lat, lon, start_date, end_date
             )
             if weather_history_raw:
                 weather_records = [
@@ -75,15 +70,11 @@ class DataManager:
                     f"records for '{city_name}'."
                 )
             else:
-                logger.warning(
-                    f"No historical weather data fetched for '{city_name}'."
-                )
+                logger.warning(f"No historical weather data fetched for '{city_name}'.")
 
             # Fetch historical traffic data
-            traffic_history_raw = (
-                self.traffic_client.get_historical_traffic_range(
-                    city_name, start_date, end_date
-                )
+            traffic_history_raw = self.traffic_client.get_historical_traffic_range(
+                city_name, start_date, end_date
             )
             if traffic_history_raw:
                 traffic_records = [
@@ -102,9 +93,7 @@ class DataManager:
                     f"records for '{city_name}'."
                 )
             else:
-                logger.warning(
-                    f"No historical traffic data fetched for '{city_name}'."
-                )
+                logger.warning(f"No historical traffic data fetched for '{city_name}'.")
 
             # Mark city as confirmed
             database.update_city_confirmation_status(
@@ -126,11 +115,7 @@ class DataManager:
             city_record = database.get_city_by_id(
                 database.get_or_create_city(city_name)
             )
-            if (
-                not city_record
-                or not city_record.latitude
-                or not city_record.longitude
-            ):
+            if not city_record or not city_record.latitude or not city_record.longitude:
                 logger.error(
                     f"Could not get coordinates for city '{city_name}'. "
                     "Aborting forecast fetch."
@@ -138,13 +123,9 @@ class DataManager:
                 return None
 
             lat, lon = city_record.latitude, city_record.longitude
-            logger.info(
-                f"Fetching 7-day forecast for '{city_name}' ({lat}, {lon})."
-            )
+            logger.info(f"Fetching 7-day forecast for '{city_name}' ({lat}, {lon}).")
 
-            forecast_raw = self.weather_client.get_forecast_daily(
-                lat, lon, days=7
-            )
+            forecast_raw = self.weather_client.get_forecast_daily(lat, lon, days=7)
 
             if forecast_raw and forecast_raw.get("days"):
                 retrieval_time = datetime.now()
@@ -152,7 +133,11 @@ class DataManager:
                 forecast_records = [
                     ForecastRecord(
                         city_id=city_record.id,
-                        date=rec["date"],
+                        date=(
+                            rec["date"]
+                            if isinstance(rec["date"], date)
+                            else datetime.fromisoformat(rec["date"]).date()
+                        ),
                         description=rec["description"],
                         temp_max=rec["temp_max"],
                         temp_min=rec["temp_min"],
@@ -165,6 +150,8 @@ class DataManager:
                     )
                     for rec in forecast_raw["days"]
                 ]
+                # It's important to delete old forecasts for the city before inserting new ones
+                database.delete_forecast_data_for_city(city_record.id)
                 database.insert_many_records("forecast_data", forecast_records)
                 logger.info(
                     f"Stored {len(forecast_records)} forecast records "
@@ -172,9 +159,7 @@ class DataManager:
                 )
                 return forecast_records
             else:
-                logger.warning(
-                    f"No 7-day forecast data fetched for '{city_name}'."
-                )
+                logger.warning(f"No 7-day forecast data fetched for '{city_name}'.")
                 return None
         except Exception as e:
             logger.error(f"Error fetching forecast for city '{city_name}': {e}")
@@ -211,9 +196,7 @@ class DataManager:
                     logger.info(f"Updated current weather for '{city.name}'.")
 
                 # 2. Fetch current traffic
-                current_traffic_raw = self.traffic_client.get_current_traffic(
-                    city.name
-                )
+                current_traffic_raw = self.traffic_client.get_current_traffic(city.name)
                 if current_traffic_raw:
                     traffic_record = TrafficRecord(
                         city_id=city.id,
@@ -227,17 +210,23 @@ class DataManager:
                     database.insert_record("traffic_data", traffic_record)
                     logger.info(f"Updated current traffic for '{city.name}'.")
 
-                # 3. Update 7-day forecast
+                # 3. Update 7-day forecast (and store it)
                 self.get_city_forecast(city.name)
 
-                # 4. Trigger Vibe Analysis
+                # 4. Trigger Vibe Analysis for current day
                 analysis = calculate_vibe(city.name)
                 logger.info(
-                    f"Vibe analysis for '{city.name}' complete: "
-                    f"{analysis.category}"
+                    f"Vibe analysis for '{city.name}' complete: " f"{analysis.category}"
                 )
 
+                # 5. Predict Vibe for the next 7 days
+                for i in range(1, 7):  # Loop for tomorrow to 6 days from now
+                    future_date = date.today() + timedelta(days=i)
+                    predicted_analysis = predict_vibe_for_date(city.name, future_date)
+                    logger.info(
+                        f"Predicted vibe for '{city.name}' on {future_date.strftime('%Y-%m-%d')}: "
+                        f"{predicted_analysis.category}"
+                    )
+
             except Exception as e:
-                logger.error(
-                    f"Error refreshing data for city '{city.name}': {e}"
-                )
+                logger.error(f"Error refreshing data for city '{city.name}': {e}")

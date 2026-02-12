@@ -5,8 +5,8 @@ from city_vibe.clients.traffic.mock_api import generate_mock_traffic_data
 
 
 class TrafficClient:
-    def __init__(self, base_url=None):
-        self.base_url = base_url
+    def __init__(self):
+        pass
 
     def get_current_traffic(self, city: str) -> Dict:
         """
