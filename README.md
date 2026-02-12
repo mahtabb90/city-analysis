@@ -216,8 +216,6 @@ Don't forget to give the project a star! Thanks again!
 <!-- CONTACT -->
 ## Contact
 
-Rasmus - Rasmus-skola@outlook.com
-
 Project Link: [https://github.com/mahtabb90/city-analysis](https://github.com/mahtabb90/city-analysis)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
