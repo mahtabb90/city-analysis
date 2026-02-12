@@ -54,7 +54,8 @@
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#contact">Contact</a></li>    
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -238,10 +239,27 @@ First time start up:
    Mac/Linux = source venv/bin/activate
    Windows = venv\Scripts\activate
 
+<!-- GROUP RULES -->
+## Rules to follow on start up.
+
+First time start up:
+1. Create a venv = python -m venv venv
+2. Activate venv. 
+   Mac/Linux = source venv/bin/activate
+   Windows = venv\Scripts\activate
+
 Every startup:
 1. Activate venv.
 2. Check Trello if there is anything to review.
 3. If there is nothing to review, choose a card and branch out if needed.
+
+When changes has been made and you are done:
+1. Git add . or Git add "map-name"
+2. Git commit -m "Message" (example "docs/yourmessage" if you have been working with a document).
+3. Git push
+
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 When changes has been made and you are done:
 1. Git add . or Git add "map-name"

@@ -1,0 +1,193 @@
+{
+  "weather": [
+    {
+      "condition": "cold",
+      "temperature_max": 0,
+      "temperature_min": -50,
+      "comments": [
+        "Don't forget to wear a warm jacket, it's freezing!",
+        "Stay cozy! It's really cold outside."
+      ]
+    },
+    {
+      "condition": "cool",
+      "temperature_max": 10,
+      "temperature_min": 1,
+      "comments": [
+        "A light jacket should be enough today.",
+        "It's a bit chilly, maybe bring a sweater."
+      ]
+    },
+    {
+      "condition": "mild",
+      "temperature_max": 20,
+      "temperature_min": 11,
+      "comments": [
+        "Nice weather today! Enjoy your day outside.",
+        "Perfect day for a walk!"
+      ]
+    },
+    {
+      "condition": "hot",
+      "temperature_max": 45,
+      "temperature_min": 21,
+      "comments": [
+        "It's pretty hot today, stay hydrated!",
+        "A sunny day! Don't forget sunscreen."
+      ]
+    }
+  ],
+  "traffic": [
+    {
+      "mode": "bus",
+      "status": "heavy",
+      "comments": [
+        "Take the train today, buses are delayed due to heavy traffic.",
+        "Bus traffic is tough. Consider using the train."
+      ]
+    },
+    {
+      "mode": "train",
+      "status": "delayed",
+      "comments": [
+        "Trains are running late, maybe check alternative routes.",
+        "Plan extra time for your train commute today."
+      ]
+    },
+    {
+      "mode": "bus",
+      "status": "normal",
+      "comments": [
+        "Bus service is running smoothly today.",
+        "You can take the bus without worries."
+      ]
+    },
+    {
+      "mode": "train",
+      "status": "normal",
+      "comments": [
+        "Train service is running on time. Have a safe trip!",
+        "Everything is running smoothly on the trains."
+      ]
+    }
+  ],
+  "vibes": [
+    {
+      "category": "CozyAtHome",
+      "base_description": "Dreadful weather outside, but it's Friday! The city is retreating for a cozy night in.",
+      "comments": [
+        "The city exhales under the rain, perfect for an evening indoors.",
+        "Lights are flickering in windows, the mood is subdued and homey.",
+        "A perfect day for tea, blankets, and movies.",
+        "The city feels small and safe as rain patters against the glass.",
+        "The scent of wet asphalt mingles with the warmth from the cafes."
+      ]
+    },
+    {
+      "category": "PeopleOutOnTown",
+      "base_description": "High spirits, full wallets, and perfect weather. The streets are alive!",
+      "comments": [
+        "The sound of laughter fills the streets, the city is pulsing with energy.",
+        "Outdoor seating is buzzing with life and happy voices.",
+        "A collective joy sweeps through the neighborhoods.",
+        "The city feels like one big party under the open sky.",
+        "Promenades are filled with people enjoying the day."
+      ]
+    },
+    {
+      "category": "RushHourStress",
+      "base_description": "The morning grind is in full swing. High congestion and hurried people.",
+      "comments": [
+        "Patience is tested in the asphalt jungle, everyone is in a hurry.",
+        "The city feels like a high-speed clockwork, the stress is palpable.",
+        "Forced strides and short glances dominate the cityscape.",
+        "A sense of collective impatience hangs over the traffic.",
+        "The hum from the city is intense and almost feverish."
+      ]},
+    {
+      "category": "StormWatch",
+      "base_description": "Unpredictable weather and traffic chaos. The city is on edge.",
+      "comments": [
+        "There's something electric in the air, nature is taking command.",
+        "The city prepares for the unknown, a tense anticipation prevails.",
+        "The wind whips between the buildings, reminding us of the wilderness.",
+        "A dramatic silence before the storm, the city holds its breath.",
+        "The sky light gives the streets an almost surreal glow."
+      ]
+    },
+    {
+      "category": "QuietCity",
+      "base_description": "The city is resting. Quiet streets and a peaceful atmosphere.",
+      "comments": [
+        "The silence is almost magical, the city rests with open eyes.",
+        "A lonely tram echoes between the houses, the peace is total.",
+        "The streets lie deserted, inviting reflection.",
+        "The city has lowered its guard, a rare sense of stillness.",
+        "The morning mist dampens all sounds, creating a dreamlike atmosphere."
+      ]
+    },
+    {
+      "category": "PaydayWeekend",
+      "base_description": "Relief and celebration in every corner, the city treats itself to a little extra.",
+      "comments": [
+        "Relief and celebration in every corner, the city treats itself to a little extra.",
+        "An aura of optimism and generosity spreads through the shops.",
+        "Wallets are full and spirits are high, the city comes alive.",
+        "The feeling of possibilities and a fresh start hangs in the air.",
+        "There's something special about the energy when the city just got paid."
+      ]
+    },
+    {
+      "category": "VibrantEvening",
+      "base_description": "Neon lights are reflected in the asphalt, the night belongs to the curious.",
+      "comments": [
+        "Neon lights are reflected in the asphalt, the night belongs to the curious.",
+        "The city changes shape into something elegant and mysterious.",
+        "A sophisticated energy begins where the day ended.",
+        "Music from inside the bars creates a rhythm for the whole block.",
+        "The evening air is cool and full of promises of adventure."
+      ]
+    },
+    {
+      "category": "Positive",
+      "base_description": "A beautiful, lazy weekend day. Perfect for a stroll.",
+      "comments": [
+        "A harmonious day where everything seems to flow as it should.",
+        "The sun and light traffic create a contagious calm.",
+        "The city shows its best and most welcoming side.",
+        "Small moments of everyday happiness are seen on every street corner.",
+        "A sense of balance and well-being characterizes the day."
+      ]
+    },
+    {
+      "category": "Negative",
+      "base_description": "Bad weather and heavy traffic. A frustrating day for commuters.",
+      "comments": [
+        "A challenging day where everything feels a bit heavier.",
+        "The city struggles against the weather and congestion.",
+        "Small moments of everyday frustration are seen on every street corner.",
+        "A sense of imbalance and discomfort characterizes the day."
+      ]
+    },
+    {
+      "category": "MIXED",
+      "base_description": "A day with mixed feelings. Some aspects are good, others less so.",
+      "comments": [
+        "The city presents a mosaic of experiences, some bright, some dim.",
+        "Contrasting elements define the day's urban rhythm.",
+        "A little bit of everything is in the air today.",
+        "Hard to pin down the overall mood, it's a mixed bag."
+      ]
+    },
+    {
+      "category": "NEUTRAL",
+      "base_description": "A standard day in the city.",
+      "comments": [
+        "The city moves at its usual pace.",
+        "Nothing extraordinary, just the daily rhythm.",
+        "A perfectly average day.",
+        "The city is neither too exciting nor too dull."
+      ]
+    }
+  ]
+} 

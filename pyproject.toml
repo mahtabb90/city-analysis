@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "city-vibe"
+version = "0.1.0"
+description = "City Vibe Analyzer – from weather data to urban feeling"
+requires-python = ">=3.10"
+
+[project.scripts]
+city-vibe = "city_vibe.presentation.cli:menu"
