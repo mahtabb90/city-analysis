@@ -151,7 +151,10 @@ To use this project, activate your virtual environment and run the main script. 
 To run the project:
 ```sh
 source venv/bin/activate
-python run.py --cli
+Python3 run.py --cli
+Eller
+./.venv/Scripts/python.exe run.py --cli
+PYTHONPATH=src ./.venv/Scripts/python.exe run.py --cli
 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
