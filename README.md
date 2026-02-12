@@ -65,7 +65,7 @@
 ## About The Project
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/mahtabb90/city-analysis">
     <img src="logo/logo-github-cv-fix.png" alt="City Vibe Logo" width="300" />
   </a>
 
@@ -153,7 +153,7 @@ To run the project:
 ```sh
 source venv/bin/activate
 Python3 run.py --cli
-Eller
+or
 ./.venv/Scripts/python.exe run.py --cli
 PYTHONPATH=src ./.venv/Scripts/python.exe run.py --cli
 ```
@@ -169,11 +169,11 @@ Our vision for City Vibe Analysis unfolds in distinct phases, each building upon
     -   Integrate robust Weather API (Open-Meteo) for comprehensive meteorological data.
     -   Implement Traffic Data acquisition (initially via MockdataAPI, with future real-time integrations).
     -   Develop a resilient Data Manager for seamless collection, storage, and retrieval of historical and current data.
-    -   Automate geocoding for all `DEFAULT_CITIES` and establish initial 60-day historical data collection.
+    -   Automate geocoding for all `DEFAULT_CITIES` and establish initial 60-day historical data collection as well as one week of forecasts.
 
 -   **Phase 2: Predictive Analytics & Vibe Modeling**
     -   Engineer the "Vibe Analyzer" module to correlate weather, traffic, and other urban metrics with human sentiments.
-    -   Develop sophisticated algorithms to predict specific "city vibes" (e.g., 'fredagskänsla', 'hemtrevnad').
+    -   Develop sophisticated algorithms to predict specific "city vibes" (e.g., 'That Friday feeling', 'Cosiness').
     -   Implement multi-version weather forecast saving for advanced forecast precision analysis.
 
 -   **Phase 3: Visualization, Reporting & User Experience**
@@ -209,12 +209,6 @@ Don't forget to give the project a star! Thanks again!
 </a>
 
 
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -222,51 +216,13 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - Rasmus-skola@outlook.com
+Rasmus - Rasmus-skola@outlook.com
 
 Project Link: [https://github.com/mahtabb90/city-analysis](https://github.com/mahtabb90/city-analysis)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
-<!-- GROUP RULES -->
-## Rules to follow on start up.
-
-First time start up:
-1. Create a venv = python -m venv venv
-2. Activate venv. 
-   Mac/Linux = source venv/bin/activate
-   Windows = venv\Scripts\activate
-
-<!-- GROUP RULES -->
-## Rules to follow on start up.
-
-First time start up:
-1. Create a venv = python -m venv venv
-2. Activate venv. 
-   Mac/Linux = source venv/bin/activate
-   Windows = venv\Scripts\activate
-
-Every startup:
-1. Activate venv.
-2. Check Trello if there is anything to review.
-3. If there is nothing to review, choose a card and branch out if needed.
-
-When changes has been made and you are done:
-1. Git add . or Git add "map-name"
-2. Git commit -m "Message" (example "docs/yourmessage" if you have been working with a document).
-3. Git push
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-When changes has been made and you are done:
-1. Git add . or Git add "map-name"
-2. Git commit -m "Message" (example "docs/yourmessage" if you have been working with a document).
-3. Git push
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <img src="logo/city-vibe-banner.png" alt="banner" />
 
